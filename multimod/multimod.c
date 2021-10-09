@@ -31,8 +31,6 @@ uint64_t multimod(uint64_t a, uint64_t b, uint64_t m) {
             ans = addmod(ans, b, m);
         }
         b = addmod(b, b, m);
-        printf(U64 " " U64 "\n", a, b);
     }
-    if (old != ans) printf("old != ans\n");
     return ans;
 }
