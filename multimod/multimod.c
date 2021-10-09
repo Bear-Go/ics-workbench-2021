@@ -60,7 +60,7 @@ static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
 
 uint64_t multimod(uint64_t a, uint64_t b, uint64_t m) {
     uint64_t ans = 0;
-    for (int i = 0; (i < 64) && (a != 0); ++ i, a >>= 1) {
+    for (; a >  0; a >>= 1) {
         if (a & 1) {
             ans = addmod(ans, b, m);
         }
