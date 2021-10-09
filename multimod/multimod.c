@@ -47,6 +47,6 @@ uint64_t multimod(uint64_t a, uint64_t b, uint64_t m) {
         }
         b = addmod(b, b, m);
     }
-    assert(ans);
+    assert(ans>=0);
     return ans;
 }
