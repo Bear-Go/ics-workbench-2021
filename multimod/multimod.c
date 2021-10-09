@@ -8,20 +8,38 @@ static inline int is_overflow(uint64_t a, uint64_t b) {
     return c;
 }
 
+static inline void transfer(uint64_t *a, uint64_t *b) {
+    uint64_t t = 0xffffffffffffffff - *a;
+    *b = *b - t;
+    *a = 0xffffffffffffffff;
+    return;
+}
+
 static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
     //wait to be solved
+    int flag = 1;
     if (is_overflow(a, b)) {
-        uint64_t t = 0xffffffffffffffff - a;
-        b = b - t;
-        a = 0xffffffffffffffff;
+        transfer(&a, &b);
     }
     else {
         a = a + b;
-
+        flag = 0;
     }
-    bool flag = false;
+
+    while (a >= m) {
+        a -= m;
+        if (flag) {
+            if (is_overflow(a, b)) {
+                transfer(&a, &b);
+            }
+            else {
+                a = a + b;
+                flag = 0;
+            }
+        }
+    }
     
-    return (a + b) % m;
+    return a;
 }
 
 uint64_t multimod(uint64_t a, uint64_t b, uint64_t m) {
