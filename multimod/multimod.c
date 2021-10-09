@@ -15,36 +15,48 @@ static inline void transfer(uint64_t *a, uint64_t *b) {
     return;
 }
 
+// static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
+//     //wait to be solved
+//     int flag = 1;
+//     if (is_overflow(a, b)) {
+//         transfer(&a, &b);
+//     }
+//     else {
+//         a = a + b;
+//         flag = 0;
+//     }
+
+//     while (a >= m) {
+//         a -= m;
+//         if (flag) {
+//             if (is_overflow(a, b)) {
+//                 transfer(&a, &b);
+//             }
+//             else {
+//                 a = a + b;
+//                 flag = 0;
+//             }
+//         }
+//     }  
+//     return a;
+// }
+
 static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
-    //wait to be solved
-    int flag = 1;
     if (is_overflow(a, b)) {
         transfer(&a, &b);
     }
-    else {
-        a = a + b;
-        flag = 0;
-    }
-
     while (a >= m) {
         a -= m;
-        if (flag) {
-            if (is_overflow(a, b)) {
-                transfer(&a, &b);
-            }
-            else {
-                a = a + b;
-                flag = 0;
-            }
-        }
     }
-    
+    while (b >= m){
+        b -= m;
+    }
+    a += b;
+    while (a >= m) {
+        a -= m;
+    }
     return a;
 }
-
-// static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
-//     return (a & (m - 1)) + (b & (m - 1));
-// }
 
 uint64_t multimod(uint64_t a, uint64_t b, uint64_t m) {
     uint64_t ans = 0;
