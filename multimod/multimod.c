@@ -10,7 +10,8 @@ static inline int carry(uint64_t a, uint64_t b) {
 
 static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
     //wait to be solved
-    if (c) {
+    /*
+    if (1) {
         uint64_t t = 0xffffffffffffffff - a;
         b = b - t;
         a = 0xffffffffffffffff;
@@ -19,6 +20,7 @@ static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
         a = a + b;
     }
     bool flag = false;
+    */
     return (a + b) % m;
 }
 
