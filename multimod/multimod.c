@@ -1,7 +1,5 @@
 #include <stdint.h>
-#include <inttypes.h>
 
-/*
 static inline int is_overflow(uint64_t a, uint64_t b) {
     int c = 0;
     for (int i = 0; i < 64; ++ i, a >>= 1, b >>= 1){
@@ -43,11 +41,10 @@ static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
     
     return a;
 }
-*/
 
-static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
-    return (a & (m - 1)) + (b & (m - 1));
-}
+// static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
+//     return (a & (m - 1)) + (b & (m - 1));
+// }
 
 uint64_t multimod(uint64_t a, uint64_t b, uint64_t m) {
     uint64_t ans = 0;
