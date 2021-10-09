@@ -29,13 +29,13 @@ static inline uint64_t addmod(uint64_t a, uint64_t b, uint64_t m) {
     while (b >= m && b > 0){
         b -= m;
     }
-    // assert(a);
-    // assert(b);
+    assert(a>=0);
+    assert(b>=0);
     a += b;
     while (a >= m && a > 0) {
         a -= m;
     }
-    // assert(a);
+    assert(a>=0);
     return a;
 }
 
