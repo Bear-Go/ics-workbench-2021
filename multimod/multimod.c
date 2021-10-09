@@ -14,8 +14,8 @@ static inline void transfer(uint64_t *a, uint64_t *b) {
     uint64_t t = 0xffffffffffffffff - *a;
     *b = *b - t;
     *a = 0xffffffffffffffff;
-    // assert(*a);
-    // assert(*b);
+    assert(*a);
+    assert(*b);
     return;
 }
 
