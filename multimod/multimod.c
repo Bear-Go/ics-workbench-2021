@@ -44,7 +44,7 @@ uint64_t mod(uint64_t x, uint64_t m) {
         return x;
     }
     
-    uint64_t k, c, quotient = 0, remainder;
+    uint64_t k, c, quotient = 0, remainder = x;
     while (x > m) {
         for (k = 0, c = m; x >= c; c <<= 1, ++ k) {
             if (x - c < m) {
