@@ -66,10 +66,14 @@ uint64_t multimod(uint64_t a, uint64_t b, uint64_t m) {
     while (a) {
         if (a & 1) {
             res += b;
-            res = mod(res, m);
+            if (res >= m) {
+                res -= m;
+            }
         }
         b += b;
-        b = mod(b, m);
+        if (b >= m) {
+            b -= m;
+        }
         a >>= 1;
     }
     return res;
