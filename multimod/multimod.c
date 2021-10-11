@@ -3,10 +3,8 @@
 static inline uint64_t mod(uint64_t a, uint64_t m) {
     uint64_t b = m;
     while (b <= a >> 1) b <<= 1;
-    while (a >= m) {
-        if (a >= b) a -= b;
-        b >>= 1;
-    }
+    for (; a >= m; b >>= 1) 
+    	if (a >= b) a -= b;
     return a;
 }
 
