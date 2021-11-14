@@ -1,7 +1,8 @@
 #include "asm.h"
-#include <string.h>
+// #include <string.h>
 
 int64_t asm_add(int64_t a, int64_t b) {
+
   return a + b;
 }
 
@@ -14,7 +15,7 @@ int asm_popcnt(uint64_t x) {
 }
 
 void *asm_memcpy(void *dest, const void *src, size_t n) {
-  return memcpy(dest, src, n);
+  // return memcpy(dest, src, n);
 }
 
 int asm_setjmp(asm_jmp_buf env) {
