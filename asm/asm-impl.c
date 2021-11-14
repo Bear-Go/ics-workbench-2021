@@ -28,11 +28,6 @@ int asm_popcnt(uint64_t x) {
     : "=a"(cnt)
     : "b"(x)
   );
-  // int s = 0;
-  // for (int i = 0; i < 64; i++) {
-  //   if ((x >> i) & 1) s++;
-  // }
-  // return s;
   return cnt;
 }
 
