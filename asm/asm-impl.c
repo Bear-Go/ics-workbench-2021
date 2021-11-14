@@ -3,9 +3,9 @@
 
 int64_t asm_add(int64_t a, int64_t b) {
   asm(
-    "addq %[t1], %[t2]\n\t"
-    : [t1] "+r"(a)
-    : [t2] "r"(b)
+    "addq %1, %0\n\t"
+    : "+r"(a)
+    : "r"(b)
     );
   return a;
 }
