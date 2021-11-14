@@ -3,7 +3,7 @@
 
 int64_t asm_add(int64_t a, int64_t b) {
   asm(
-    "addq %%ebx, %%eax\n\t"
+    "addq %%rbx, %%rax\n\t"
     : "+a"(a)
     : "b"(b)
     );
