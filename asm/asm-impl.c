@@ -3,9 +3,9 @@
 
 int64_t asm_add(int64_t a, int64_t b) {
   asm(
-    "addq %1, %0\n\t"
-    : "+r"(a)
-    : "r"(b)
+    "addq %%ebx, %%eax\n\t"
+    : "+a"(a)
+    : "b"(b)
     );
   return a;
 }
@@ -20,13 +20,13 @@ int asm_popcnt(uint64_t x) {
     "jge  outside\n\t"
     "movq %%rbx,  %%rdx\n\t"
     "and  $1, %%rdx\n\t"
-    "addl %%edx,  %%eax;"
-    "incl %%ecx;"
-    "shrq $1,%%rbx;"
-    "jmp  inside;"
+    "addl %%edx,  %%eax\n\t"
+    "incl %%ecx\n\t"
+    "shrq $1, %%rbx\n\t"
+    "jmp  inside\n\t"
     "outside:"
-    :"=a"(cnt)
-    :"b"(x)
+    : "=a"(cnt)
+    : "b"(x)
   );
   // int s = 0;
   // for (int i = 0; i < 64; i++) {
