@@ -11,12 +11,29 @@ int64_t asm_add(int64_t a, int64_t b) {
 }
 
 int asm_popcnt(uint64_t x) {
-  int s = 0;
-  for (int i = 0; i < 64; i++) {
-    if ((x >> i) & 1) s++;
-  }
-  return s;
-  // return 0;
+  int cnt;
+  asm(
+    "movl $0, %%eax;"
+    "movl $0, %%ecx;"
+    "inside:\n\t"
+    "cmpl $64, %%ecx;"
+    "jge outside;"
+    "movq %%rbx, %%rdx;"
+    "and $1,%%rdx;"
+    "addl %%edx,%%eax;"
+    "incl %%ecx;"
+    "shrq $1,%%rbx;"
+    "jmp inside;"
+    "outside:"
+    :"=a"(cnt)
+    :"b"(x)
+  );
+  // int s = 0;
+  // for (int i = 0; i < 64; i++) {
+  //   if ((x >> i) & 1) s++;
+  // }
+  // return s;
+  return cnt;
 }
 
 void *asm_memcpy(void *dest, const void *src, size_t n) {
