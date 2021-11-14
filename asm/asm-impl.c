@@ -2,16 +2,17 @@
 // #include <string.h>
 
 int64_t asm_add(int64_t a, int64_t b) {
-
-  return a + b;
+  return 0;
+  // return a + b;
 }
 
 int asm_popcnt(uint64_t x) {
-  int s = 0;
-  for (int i = 0; i < 64; i++) {
-    if ((x >> i) & 1) s++;
-  }
-  return s;
+  // int s = 0;
+  // for (int i = 0; i < 64; i++) {
+  //   if ((x >> i) & 1) s++;
+  // }
+  // return s;
+  return 0;
 }
 
 void *asm_memcpy(void *dest, const void *src, size_t n) {
