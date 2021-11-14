@@ -3,11 +3,8 @@
 
 int64_t asm_add(int64_t a, int64_t b) {
   asm(
-    "addq %%rbx, %%rax\n\t"
-    : "+a"(a)
-    : "b"(b)
-    );
-  return a;
+    "leaq (%rcx,%rdx), %eax\n\t"  
+  );
 }
 
 int asm_popcnt(uint64_t x) {
@@ -34,6 +31,7 @@ int asm_popcnt(uint64_t x) {
 void *asm_memcpy(void *dest, const void *src, size_t n) {
   void *ret = dest;
   asm volatile(
+    "movq "
     "rep movsb\n\t"
     : "+D"(dest)
     : "c"(n), "S"(src)
