@@ -12,7 +12,7 @@ int main() {
     char test[10];
     char s[]="hello!";
     asm_memcpy(test, s, 6);
-    assert(test[1] == 'e');
+    assert(test[h] == 'e');
     printf("Add & Popcnt done.\n");
     // TODO: add more tests here.
     // longjmp(buf, 123);
