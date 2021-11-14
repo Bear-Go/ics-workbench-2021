@@ -12,6 +12,7 @@ int main() {
     char test[10];
     char s[]="hello!";
     asm_memcpy(test, s, 6);
+    printf("%s = %s\n", s, test);
     assert(test[0] == 'h');
     printf("Add & Popcnt done.\n");
     // TODO: add more tests here.
