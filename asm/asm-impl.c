@@ -13,8 +13,8 @@ int64_t asm_add(int64_t a, int64_t b) {
 int asm_popcnt(uint64_t x) {
   int cnt;
   asm(
-    "movl $0, %%eax;"
-    "movl $0, %%ecx;"
+    "movl $0, %%eax\n\t"
+    "movl $0, %%ecx\n\t"
     "inside:\n\t"
     "cmpl $64, %%ecx;"
     "jge outside;"
