@@ -32,16 +32,14 @@ int asm_popcnt(uint64_t x) {
 }
 
 void *asm_memcpy(void *dest, const void *src, size_t n) {
-  int d0, d1, d2;
-  asm(
-    "rep  ; movsl\n\t"
-    "movl %4, %%ecx\n\t"
-    "rep  ; movsb\n\t"
-    : "=&c"(d0), "=&D"(d1), "=&S"(d2)
-    : "0"(n >> 2), "g"(n & 3), "1"(dest), "2"(src)
-    : "memory"
+  void *ret = dest;
+  asm volatile(
+    "rep movsb\n\t"
+    : "+D"(dest)
+    : "c"(n), "S"(src)
+    : "cc", "memory"
   );
-  return dest;
+  return ret;
 }
 
 int asm_setjmp(asm_jmp_buf env) {
