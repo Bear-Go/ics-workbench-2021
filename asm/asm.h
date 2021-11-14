@@ -2,10 +2,9 @@
 #include <stddef.h>
 
 // TODO: replace with your definition
-// #include <setjmp.h> // remove this
-// #define asm_jmp_buf jmp_buf
-
-typedef uintptr_t asm_jmp_buf[8];
+#include <setjmp.h> // remove this
+typedef long int jmp_buf[8];
+#define asm_jmp_buf jmp_buf
 
 int64_t asm_add(int64_t a, int64_t b);
 int     asm_popcnt(uint64_t x);
