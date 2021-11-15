@@ -9,10 +9,11 @@ int64_t asm_add(int64_t a, int64_t b) {
     );
   return a;
 }
-
+ 
 int asm_popcnt(uint64_t x) {
   int cnt = 0;
   asm(
+    "movl $0, %%eax\n\t" // ? local: rm wrong/oj: rm right 
     "movl $0, %%ecx\n\t"
     "inside:\n\t"
     "cmpl $64,  %%ecx\n\t"
@@ -33,10 +34,10 @@ int asm_popcnt(uint64_t x) {
 void *asm_memcpy(void *dest, const void *src, size_t n) {
   void *ret = NULL;
   asm(
-    "movq %[dest],  %[ret]\n\t"
+    "movq %[dest],  %[ret]\n\t" // faster ?
     "rep movsb\n\t"
-    : [dest] "+D"(dest), [ret] "+g"(ret)
-    : "c"(n), "S"(src)
+    : [dest] "+m"(dest), [ret] "+g"(ret)
+    : "m"(n), "m"(src)
     : "cc", "memory"
   );
   return ret;
