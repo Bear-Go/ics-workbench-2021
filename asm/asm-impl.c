@@ -36,7 +36,7 @@ void *asm_memcpy(void *dest, const void *src, size_t n) {
   asm volatile(
     // "mov %[ret],\n\t"
     "rep movsb\n\t"
-    : "+D"(dest)
+    : [dest] "+D"(dest)
     : "c"(n), "S"(src)
     : "cc", "memory"
   );
