@@ -34,9 +34,9 @@ int asm_popcnt(uint64_t x) {
 void *asm_memcpy(void *dest, const void *src, size_t n) {
   void *ret = dest;
   asm volatile(
-    // "mov %[ret],\n\t"
+    "mov %[dest],  %[ret]\n\t"
     "rep movsb\n\t"
-    : [dest] "+D"(dest)
+    : [dest] "+D"(dest), [ret] "+g"(ret)
     : "c"(n), "S"(src)
     : "cc", "memory"
   );
