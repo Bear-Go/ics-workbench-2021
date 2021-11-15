@@ -59,7 +59,6 @@ int asm_setjmp(asm_jmp_buf env) {
     : "rax", "rcx", "cc", "memory"
   );
   return 0;
-  // return setjmp(env);
 }
 
 void asm_longjmp(asm_jmp_buf env, int val) {
