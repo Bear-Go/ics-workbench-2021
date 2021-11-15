@@ -37,7 +37,7 @@ void *asm_memcpy(void *dest, const void *src, size_t n) {
     "movq %[dest],  %[ret]\n\t" // faster ?
     "rep movsb\n\t"
     : [dest] "+D"(dest), [ret] "+g"(ret)
-    : "m"(n), "S"(src)
+    : "c"(n), "S"(src)
     : "cc", "memory"
   );
   return ret;
