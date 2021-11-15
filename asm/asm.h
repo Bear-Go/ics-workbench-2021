@@ -2,7 +2,7 @@
 #include <stddef.h>
 
 // TODO: replace with your definition
-// #include <setjmp.h> // remove this
+#include <setjmp.h> // remove this
 typedef long int asm_jmp_buf[8];
 
 int64_t asm_add(int64_t a, int64_t b);
