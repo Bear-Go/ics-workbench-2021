@@ -78,11 +78,11 @@ void asm_longjmp(asm_jmp_buf env, int val) {
   asm(
     "mov %%rdi, %%rdx\n\t"
     "mov %%esi, %%eax\n\t"
-    "mov (%%rdx),%%rbx\n\t"
-    "mov 8(%%rdx),%%rsi\n\t"
-    "mov 16(%%rdx),%%rdi\n\t"
-    "mov 24(%%rdx),%%rbp\n\t"
-    "mov 32(%%rdx),%%rsp\n\t"
+    "mov (%%rdx), %%rbx\n\t"
+    "mov 8(%%rdx), %%rsi\n\t"
+    "mov 16(%%rdx), %%rdi\n\t"
+    "mov 24(%%rdx), %%rbp\n\t"
+    "mov 32(%%rdx), %%rsp\n\t"
     "jmp *40(%%rdx)\n\t"
   );
   // longjmp(env, val);
