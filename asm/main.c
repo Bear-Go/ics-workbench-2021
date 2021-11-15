@@ -4,7 +4,6 @@
 
 int main() {
   asm_jmp_buf buf;
-  int r = 0;
   int r = asm_setjmp(buf);
   if (r == 0) {
     assert(asm_add(1234, 5678) == 6912);
