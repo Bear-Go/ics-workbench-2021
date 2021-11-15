@@ -11,9 +11,9 @@ int64_t asm_add(int64_t a, int64_t b) {
 }
 
 int asm_popcnt(uint64_t x) {
-  int cnt;
+  int cnt = 0;
   asm(
-    "movl $0, %%eax\n\t"
+    // "movl $0, %%eax\n\t"
     "movl $0, %%ecx\n\t"
     "inside:\n\t"
     "cmpl $64,  %%ecx\n\t"
@@ -34,7 +34,7 @@ int asm_popcnt(uint64_t x) {
 void *asm_memcpy(void *dest, const void *src, size_t n) {
   void *ret = NULL;
   asm volatile(
-    "mov %[dest],  %[ret]\n\t"
+    "movq %[dest],  %[ret]\n\t"
     "rep movsb\n\t"
     : [dest] "+D"(dest), [ret] "+g"(ret)
     : "c"(n), "S"(src)
