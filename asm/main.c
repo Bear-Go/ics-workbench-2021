@@ -17,7 +17,8 @@ int main() {
     // TODO: add more tests here.
     asm_longjmp(buf, 123);
   } else {
-    printf("%d", r);
+    printf("this!\n");
+    printf("%d\n", r);
     assert(r == 123);
     printf("PASSED.\n");
   }
