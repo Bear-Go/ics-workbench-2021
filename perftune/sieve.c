@@ -9,8 +9,8 @@ static bool is_prime[N];
 static int  primes[N];
 
 int *sieve(int n) {
-  volatile int cnt = 0;
-  for (volatile int i = 2; i <= n; ++i) {
+  int cnt = 0;
+  for (int i = 2; i <= n; ++i) {
     if (!is_prime[i]) primes[cnt++] = i;
     for (int j = 0; j < cnt && primes[j]*i <= n; ++j) {
       int temp = primes[j] * i;
