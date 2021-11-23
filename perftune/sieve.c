@@ -5,18 +5,19 @@
 
 #define N 10000000
 
-static bool is_prime[N];
+static bool not_prime[N/2];
 static int  primes[N];
 
 int *sieve(int n) {
-  int cnt = 0;
-  for (int i = 2; i <= n; ++i) {
-    if (!is_prime[i]) primes[cnt++] = i;
-    for (int j = 0; j < cnt && primes[j]*i <= n; ++j) {
-      int temp = primes[j] * i;
-      if (temp <= n) {
-        is_prime[temp] = 1;
-        if (i%primes[j]==0) break;
+  int cnt = 1;
+  primes[0] = 2;
+  for (int i = 0, num = i<<2+3; num < n; num = ++i<<2+3) {
+    if (!not_prime[i]) primes[cnt++] = num;
+    for (int j = 0; j < cnt; ++j) {
+      int t = primes[j] * num;
+      if (t <= n) {
+        not_prime[(t-3)>>2] = 1;
+        if (num % primes[j] == 0) break;
       }
     }
   }
