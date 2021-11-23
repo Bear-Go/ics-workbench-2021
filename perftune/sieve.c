@@ -12,7 +12,7 @@ static int  primes[N];
 int *sieve(int n) {
   primes[0] = 2;
   int cnt = 1;
-  for (int i = 0, num = 3; num < n; num = ++i * 2 + 3) {
+  for (int i = 0, num = 3; num < n;) {
     if (!not_prime[i]) primes[cnt++] = num;
     for (int j = 1; j < cnt && num * primes[j] < n; ++j) {
       not_prime[(num * primes[j] - 3) / 2] = 1;
