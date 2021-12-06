@@ -32,7 +32,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
   BLOCK_NUM = exp2(total_size_width) / BLOCK_SIZE;
-  SET_NUM = BLOCK_NUM / associativity_width;
+  SET_NUM = BLOCK_NUM / exp2(associativity_width);
   printf("block num = %d\n", BLOCK_NUM);
   printf("set num = %d\n", SET_NUM);
 }
