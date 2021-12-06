@@ -12,7 +12,7 @@ void cycle_increase(int n) { cycle_cnt += n; }
 
 #define CACHE_SIZE (1 << 20) // 
 
-static uint8_t cache[];
+static uint8_t cache[CACHE_SIZE];
 static uint32_t BLOCK_NUM = 0;
 static uint32_t SET_NUM = 0;
 static uint32_t SET_WIDTH = 0;
