@@ -16,6 +16,7 @@ void cycle_increase(int n) { cycle_cnt += n; }
 static uint8_t cache[CACHE_SIZE];
 static bool valid_bit[BLOCK_NUM_MAX];
 static uint32_t BLOCK_NUM = 0;
+static uint32_t SET_SIZE = 0;
 static uint32_t SET_NUM = 0;
 static uint32_t SET_WIDTH = 0;
 // 从 cache 中读出 addr 地址处的 4 字节数据
@@ -23,6 +24,7 @@ static uint32_t SET_WIDTH = 0;
 uint32_t cache_read(uintptr_t addr) {
   // get the block_num from addr
   uint32_t index = addr & mask_with_len(SET_WIDTH);
+
   printf("index %d\n", index);
   return 0;
 }
@@ -38,7 +40,8 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
   BLOCK_NUM = exp2(total_size_width) / BLOCK_SIZE;
-  SET_NUM = BLOCK_NUM / exp2(associativity_width);
+  SET_SIZE = exp2(associativity_width);
+  SET_NUM = BLOCK_NUM / SET_SIZE;
   SET_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
   printf("block num = %d\n", BLOCK_NUM);
   printf("set num = %d\n", SET_NUM);
