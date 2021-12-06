@@ -13,6 +13,7 @@ void cycle_increase(int n) { cycle_cnt += n; }
 static uint8_t *cache;
 static uint32_t BLOCK_NUM = 0;
 static uint32_t SET_NUM = 0;
+static uint32_t SET_WIDTH = 0;
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
@@ -33,8 +34,10 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 void init_cache(int total_size_width, int associativity_width) {
   BLOCK_NUM = exp2(total_size_width) / BLOCK_SIZE;
   SET_NUM = BLOCK_NUM / exp2(associativity_width);
+  SET_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
   printf("block num = %d\n", BLOCK_NUM);
   printf("set num = %d\n", SET_NUM);
+  printf("set num = %d\n", SET_WIDTH);
 }
 
 void display_statistic(void) {
