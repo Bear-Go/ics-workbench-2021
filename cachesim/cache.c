@@ -14,7 +14,7 @@ void cycle_increase(int n) { cycle_cnt += n; }
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
   // get the block_num from addr
-  
+
   return 0;
 }
 
@@ -27,6 +27,9 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 初始化一个数据大小为 2^total_size_width B，关联度为 2^associativity_width 的 cache
 // 例如 init_cache(14, 2) 将初始化一个 16KB，4 路组相联的cache
 // 将所有 valid bit 置为无效即可
+
+static uint8_t cache[][];
+
 void init_cache(int total_size_width, int associativity_width) {
 }
 
