@@ -9,7 +9,7 @@ void init_mem(void) {
   for (i = 0; i < MEM_SIZE; i ++) {
     mem[i] = rand() & 0xff;
   }
-  printf("mem size = %d\n", MEM_SIZE);
+  
   memcpy(mem_diff, mem, MEM_SIZE);
 }
 
