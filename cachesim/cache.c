@@ -13,6 +13,8 @@ void cycle_increase(int n) { cycle_cnt += n; }
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
+  // get the block_num from addr
+  
   return 0;
 }
 
