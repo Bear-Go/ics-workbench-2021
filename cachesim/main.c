@@ -124,7 +124,7 @@ void replay_trace(void) {
 }
 
 int main(int argc, char *argv[]) {
-  printf("%d\n", sizeof(uintptr_t));
+  printf("%ld\n", sizeof(uintptr_t));
   parse_args(argc, argv);
 
   init_rand(seed);
