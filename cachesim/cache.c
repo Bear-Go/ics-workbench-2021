@@ -22,7 +22,7 @@ static uint32_t SET_WIDTH = 0;
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
   // get the block_num from addr
-
+  
   return 0;
 }
 
@@ -43,7 +43,6 @@ void init_cache(int total_size_width, int associativity_width) {
   printf("set num = %d\n", SET_NUM);
   printf("set width = %d\n", SET_WIDTH);
   memset(valid_bit, 0, BLOCK_NUM);
-
 }
 
 void display_statistic(void) {
