@@ -13,11 +13,13 @@ void init_mem(void) {
   memcpy(mem_diff, mem, MEM_SIZE);
 }
 
+// 从块号为`block_num`的内存地址中读出一整个cache块大小的内容到`buf`中
 void mem_read(uintptr_t block_num, uint8_t *buf) {
   memcpy(buf, mem + (block_num << BLOCK_WIDTH), BLOCK_SIZE);
   cycle_increase(25);
 }
 
+// 往块号为`block_num`的内存地址中写入一整个cache块大小的内容`buf`
 void mem_write(uintptr_t block_num, const uint8_t *buf) {
   memcpy(mem + (block_num << BLOCK_WIDTH), buf, BLOCK_SIZE);
   cycle_increase(6);
