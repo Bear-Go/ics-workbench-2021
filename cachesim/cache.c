@@ -12,6 +12,7 @@ void cycle_increase(int n) { cycle_cnt += n; }
 
 static uint8_t *cache;
 static uint32_t BLOCK_NUM = 0;
+static uint32_t SET_NUM = 0;
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
@@ -30,7 +31,10 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 例如 init_cache(14, 2) 将初始化一个 16KB，4 路组相联的cache
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
-  (exp2(total_size_width) / BLOCK_SIZE)
+  BLOCK_NUM = exp2(total_size_width) / BLOCK_SIZE;
+  SET_NUM = BLOCK_NUM / associativity_width;
+  printf("block num = %d\n", BLOCK_NUM);
+  printf("set num = %d\n", SET_NUM);
 }
 
 void display_statistic(void) {
