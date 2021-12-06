@@ -11,7 +11,7 @@ void cycle_increase(int n) { cycle_cnt += n; }
 // TODO: implement the following functions
 
 #define CACHE_SIZE (1 << 20) // 1MB
-#define BLOCK_NUM_MAX exp2(CACHE_SIZE / BLOCK_SIZE)
+#define BLOCK_NUM_MAX CACHE_SIZE / BLOCK_SIZE
 static uint8_t cache[CACHE_SIZE];
 static bool valid_bit[BLOCK_NUM_MAX];
 static uint32_t BLOCK_NUM = 0;
