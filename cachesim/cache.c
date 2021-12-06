@@ -10,7 +10,9 @@ void cycle_increase(int n) { cycle_cnt += n; }
 
 // TODO: implement the following functions
 
-static uint8_t *cache;
+#define CACHE_SIZE (1 << 20) // 
+
+static uint8_t cache[];
 static uint32_t BLOCK_NUM = 0;
 static uint32_t SET_NUM = 0;
 static uint32_t SET_WIDTH = 0;
