@@ -40,9 +40,9 @@ void init_cache(int total_size_width, int associativity_width) {
   SET_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
   printf("block num = %d\n", BLOCK_NUM);
   printf("set num = %d\n", SET_NUM);
-  printf("set num = %d\n", SET_WIDTH);
+  printf("set width = %d\n", SET_WIDTH);
 
-  
+
 }
 
 void display_statistic(void) {
