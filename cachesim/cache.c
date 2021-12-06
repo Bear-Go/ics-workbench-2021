@@ -24,7 +24,7 @@ static uint32_t SET_WIDTH = 0;
 uint32_t cache_read(uintptr_t addr) {
   // get the block_num from addr
   uint32_t index = addr & mask_with_len(SET_WIDTH);
-
+  
   printf("index %d\n", index);
   return 0;
 }
