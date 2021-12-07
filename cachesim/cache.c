@@ -74,6 +74,7 @@ uint32_t cache_read(uintptr_t addr) {
   mem_read(block_num, this_cache[choice].data);
   this_cache[choice].valid_bit = 1;
   this_cache[choice].dirty_bit = 0;
+  printf("READ\n");
 #endif
   return 0;
 }
