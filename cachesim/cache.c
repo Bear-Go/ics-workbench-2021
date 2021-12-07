@@ -72,6 +72,7 @@ uint32_t cache_read(uintptr_t addr) {
       this_cache[i].dirty_bit = false;
       this_cache[i].tag = TAG(addr);
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
+      printf("*ret = 0x%08x\n", *ret);
       printf("exist invalid bit\n");
       return (*ret << addr_offset_bit(*ret));
     }
@@ -89,7 +90,6 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[idx].dirty_bit = false;
   this_cache[idx].tag = TAG(addr);
   uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
-  printf("*ret = 0x%08x\n", *ret);
   printf("all valid bits\n");
   return (*ret << addr_offset_bit(*ret));
 
