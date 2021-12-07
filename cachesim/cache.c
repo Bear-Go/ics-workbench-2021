@@ -29,8 +29,6 @@ static uint32_t INDEX_WIDTH = 0;
 #define ADDR_IN_BLOCK(addr) (addr & mask_with_len(BLOCK_WIDTH))
 #define BLOCK_NUM(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH))
 
-
-
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
@@ -98,6 +96,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit) {
       uint32_t *target = (uint32_t *)(this_cache[i].data + addr_in_block);
       *target = data & wmask;
+      this_cache[i].dirty_bit = true;
       return;
     }
   }
@@ -116,7 +115,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
       this_cache[i].tag = TAG(addr);
       uint32_t *target = (uint32_t *)(this_cache[i].data + addr_in_block);
       *target = data & wmask;
-      this_cache[i].dirty_bit = 1;
+      this_cache[i].dirty_bit = true;
       return;
     }
   }
@@ -124,8 +123,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   // all valid bits
   int choice = rand() % SET_SIZE;
   if (this_cache[choice].dirty_bit) {
-    mem_write(block_num, this_cache[choice].data);
-    // mem_write(this_cache[choice].tag << INDEX_WIDTH | index, this_cache[choice].data);
+    mem_write(this_cache[choice].tag << INDEX_WIDTH | index, this_cache[choice].data);
   }
   mem_read(block_num, this_cache[choice].data);
   this_cache[choice].valid_bit = 1;
