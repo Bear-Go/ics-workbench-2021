@@ -17,20 +17,20 @@ typedef struct {
   uint8_t data[BLOCK_SIZE];
 } line;
 
-
-#define CACHE_SIZE (1 << 20) // 1MB
-#define BLOCK_NUM_MAX CACHE_SIZE / BLOCK_SIZE
 static line *cache;
 
 static uint32_t LINE_NUM = 0;
 static uint32_t SET_SIZE = 0;
 static uint32_t SET_NUM = 0;
-static uint32_t SET_WIDTH = 0;
+static uint32_t INDEX_WIDTH = 0;
+
+#define index_of_addr(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(INDEX_WIDTH))
+
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
   // get the block_num from addr
-  uint32_t index = addr & mask_with_len(SET_WIDTH);
+  uint32_t index = (addr >> BLOCK_WIDTH) & mask_with_len(INDEX_WIDTH);
 
   printf("index %d\n", index);
   return 0;
@@ -49,11 +49,11 @@ void init_cache(int total_size_width, int associativity_width) {
   LINE_NUM = exp2(total_size_width) / BLOCK_SIZE;
   SET_SIZE = exp2(associativity_width);
   SET_NUM = LINE_NUM / SET_SIZE;
-  SET_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
+  INDEX_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
   printf("line num = %d\n", LINE_NUM);
   printf("set size = %d\n", SET_SIZE);
   printf("set num = %d\n", SET_NUM);
-  printf("set width = %d\n", SET_WIDTH);
+  printf("index width = %d\n", INDEX_WIDTH);
   // create the cache
   cache = (line *)malloc(sizeof(line) * LINE_NUM);
   // set valid bits
