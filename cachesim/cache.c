@@ -59,9 +59,12 @@ uint32_t cache_read(uintptr_t addr) {
       break;
     }
   }
-  mem_read(block_num, (uint8_t *)this_cache[choice]);
-  if (choice == -1) {
+  mem_read(block_num, this_cache[choice].data);
+  this_cache[choice].valid_bit = 1;
+  this_cache[choice].tag = TAG(addr);
 
+  if (choice == -1) {
+    choice = rand() % SET_SIZE;
   } 
   printf("index %d\n", index);
   return 0;
