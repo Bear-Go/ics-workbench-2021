@@ -36,7 +36,7 @@ static uint32_t INDEX_WIDTH = 0;
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
 
-  // get the block_num from addr
+  // get base info
   uint32_t index = INDEX(addr);
   uint32_t tag = TAG(addr);
   uint32_t addr_in_block = ADDR_IN_BLOCK(addr);
@@ -72,7 +72,6 @@ uint32_t cache_read(uintptr_t addr) {
   // all valid bits
   int choice = rand() % SET_SIZE;
   if (this_cache[choice].dirty_bit) {
-
     mem_write(this_cache[choice].tag << INDEX_WIDTH | index, this_cache[choice].data);
   }
   mem_read(block_num, this_cache[choice].data);
@@ -87,6 +86,23 @@ uint32_t cache_read(uintptr_t addr) {
 // 例如当 wmask 为 0xff 时，只写入低8比特
 // 若缺失，需要从先内存中读入数据
 void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
+  
+  // get base info
+  uint32_t index = INDEX(addr);
+  uint32_t tag = TAG(addr);
+  uint32_t addr_in_block = ADDR_IN_BLOCK(addr);
+
+  // check every line of this set
+  line *this_cache = cache + SET_SIZE * index;
+  for (int i = 0; i < SET_SIZE; ++ i) {
+    cycle_increase(1);
+    // hit
+    if ((this_cache[i].tag == tag) && this_cache[i].valid_bit) {
+      uint32_t *target = (uint32_t *)(this_cache[i].data + addr_in_block);
+      *target = data & wmask;
+      return;
+    }
+  }
 }
 
 // 初始化一个数据大小为 2^total_size_width B，关联度为 2^associativity_width 的 cache
