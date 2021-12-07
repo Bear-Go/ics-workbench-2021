@@ -4,6 +4,8 @@
 
 void mem_read(uintptr_t block_num, uint8_t *buf);
 void mem_write(uintptr_t block_num, const uint8_t *buf);
+void cache2mem();
+void mem2cache();
 
 static uint64_t cycle_cnt = 0;
 
@@ -46,7 +48,8 @@ uint32_t cache_read(uintptr_t addr) {
     }
   }
   // miss缺失
-
+  cache2mem();
+  mem2cache();
   printf("index %d\n", index);
   return 0;
 }
@@ -71,7 +74,7 @@ void init_cache(int total_size_width, int associativity_width) {
   cache = (line *)malloc(sizeof(line) * LINE_NUM);
   // set valid bits
   for (int i = 0; i < LINE_NUM; ++ i) cache[i].valid_bit = 0;
-  
+
   printf("[LINE_NUM := %d]\n", LINE_NUM);
   printf("[SET_SIZE := %d]\n", SET_SIZE);
   printf("[SET_NUM := %d]\n", SET_NUM);
