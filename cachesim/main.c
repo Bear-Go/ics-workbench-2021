@@ -37,7 +37,7 @@ static void trace_exec(struct trace *t, bool is_check) {
     cpu_write(t->t.addr, t->t.len, t->data);
     if (is_check) {
       cpu_uncache_write(t->t.addr, t->t.len, t->data);
-      printf("write\n[0x%08x] = 0x%08x\n", t->t.addr, t->data);
+      printf("write\n[0x%08x] = 0x%08x\n\n", t->t.addr, t->data);
     }
   }
   else {
