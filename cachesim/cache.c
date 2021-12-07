@@ -19,10 +19,10 @@ typedef struct {
 
 static line *cache;
 
-static uint32_t LINE_NUM = 0;
-static uint32_t SET_SIZE = 0;
-static uint32_t SET_NUM = 0;
-static uint32_t INDEX_WIDTH = 0;
+static uint32_t LINE_NUM = 0; // the number of lines in cache
+static uint32_t SET_SIZE = 0; // how many lines in a set/group
+static uint32_t SET_NUM = 0; // how many sets/groups in cache
+static uint32_t INDEX_WIDTH = 0; // how many bits of index of set/group
 
 #define INDEX(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(INDEX_WIDTH))
 #define TAG(addr) ((addr >> (BLOCK_WIDTH + INDEX_WIDTH)) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH - INDEX_WIDTH))
@@ -33,21 +33,22 @@ static uint32_t INDEX_WIDTH = 0;
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
 
-  // // get base info
-  // uint32_t index = INDEX(addr);
-  // uint32_t tag = TAG(addr);
-  // uint32_t addr_in_block = ADDR_IN_BLOCK(addr);
+  // decomp addr
+  addr &= mask_with_len(MEM_WIDTH);
+  uint32_t index = INDEX(addr); // index of set
+  uint32_t tag = TAG(addr); // tag of block
+  uint32_t addr_in_block = ADDR_IN_BLOCK(addr); // addr in block
 
-  // // check every line of this set
-  // line *this_cache = cache + SET_SIZE * index;
-  // for (int i = 0; i < SET_SIZE; ++ i) {
-  //   cycle_increase(1);
-  //   // hit
-  //   if ((this_cache[i].tag == tag) && this_cache[i].valid_bit) {
-  //     uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
-  //     return *ret;
-  //   }
-  // }
+  // check every line of this set
+  line *this_cache = cache + SET_SIZE * index;
+  printf("%d\n", this_cache-cache);
+  for (int i = 0; i < SET_SIZE; ++ i) {
+    // hit
+    if ((this_cache[i].tag == tag) && this_cache[i].valid_bit) {
+      uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
+      return *ret;
+    }
+  }
 
   // // miss缺失
   // uint32_t block_num = BLOCK_NUM(addr);
@@ -75,15 +76,15 @@ uint32_t cache_read(uintptr_t addr) {
   // this_cache[choice].valid_bit = 1;
   // this_cache[choice].dirty_bit = 0;
   // printf("READ\n");
-  return 0;
 
 }
-
+  
 // 往 cache 中 addr 地址所属的块写入数据 data，写掩码为 wmask
 // 例如当 wmask 为 0xff 时，只写入低8比特
 // 若缺失，需要从先内存中读入数据
 void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   
+  mem_read(BLOCK_NUM(addr), fmem[addr]);
   // // get base info
   // uintptr_t index = INDEX(addr);
   // uintptr_t tag = TAG(addr);
@@ -147,25 +148,19 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
 
-  // LINE_NUM = exp2(total_size_width) / BLOCK_SIZE;
-  // SET_SIZE = exp2(associativity_width);
-  // SET_NUM = LINE_NUM / SET_SIZE;
-  // INDEX_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
+  LINE_NUM = exp2(total_size_width) / BLOCK_SIZE;
+  SET_SIZE = exp2(associativity_width);
+  SET_NUM = LINE_NUM / SET_SIZE;
+  INDEX_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
   
-  // // create the cache
-  // cache = (line *)malloc(sizeof(line) * LINE_NUM);
-  // // set valid bits & dirty bits
-  // for (int i = 0; i < LINE_NUM; ++ i) {
-  //   cache[i].valid_bit = 0;
-  //   cache[i].dirty_bit = 0;
-  // }
+  // create the cache
+  cache = malloc(sizeof(line) * LINE_NUM);
+  // set valid bits & dirty bits
+  for (int i = 0; i < LINE_NUM; ++ i) {
+    cache[i].valid_bit = 0;
+    cache[i].dirty_bit = 0;
+  }
 
-  // printf("[LINE_NUM := %d]\n", LINE_NUM);
-  // printf("[SET_SIZE := %d]\n", SET_SIZE);
-  // printf("[SET_NUM := %d]\n", SET_NUM);
-  // printf("[INDEX_WIDTH := %d]\n", INDEX_WIDTH);
-  // printf("init_cache finished\n");
-  
 }
 
 void display_statistic(void) {
