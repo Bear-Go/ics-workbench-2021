@@ -24,13 +24,28 @@ static uint32_t SET_SIZE = 0;
 static uint32_t SET_NUM = 0;
 static uint32_t INDEX_WIDTH = 0;
 
-#define index_of_addr(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(INDEX_WIDTH))
+#define INDEX(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(INDEX_WIDTH))
+#define TAG(addr) ((addr >> (BLOCK_WIDTH + INDEX_WIDTH)) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH - INDEX_WIDTH))
+#define ADDR_IN_BLOCK(addr) (addr & mask_with_len(BLOCK_WIDTH))
 
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
   // get the block_num from addr
-  uint32_t index = (addr >> BLOCK_WIDTH) & mask_with_len(INDEX_WIDTH);
+  uint32_t index = INDEX(addr);
+  uint32_t tag = TAG(addr);
+  uint32_t addr_in_block = ADDR_IN_BLOCK(addr);
+
+  // check every line of this set
+  for (int i = SET_SIZE * index; i < SET_SIZE * (index + 1); ++ i) {
+    cycle_increase(1);
+    // hit
+    if ((cache[i].tag == tag) && cache[i].valid_bit) {
+      uint32_t *ret = (uint32_t *)(cache[i].data + addr_in_block);
+      return *ret;
+    }
+  }
+  // miss
 
   printf("index %d\n", index);
   return 0;
