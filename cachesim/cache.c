@@ -83,8 +83,6 @@ uint32_t cache_read(uintptr_t addr) {
 // 例如当 wmask 为 0xff 时，只写入低8比特
 // 若缺失，需要从先内存中读入数据
 void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
-  
-  mem_read(BLOCK_NUM(addr), fmem[addr]);
   // // get base info
   // uintptr_t index = INDEX(addr);
   // uintptr_t tag = TAG(addr);
