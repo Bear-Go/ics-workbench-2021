@@ -73,7 +73,7 @@ uint32_t cache_read(uintptr_t addr) {
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block); // duo du le liang ge zi jie
       char *t = (char *)ret;
       printf("0x%02x\n", *t);
-      t = t - 2;
+      t = t;
       ret = (uint32_t *)t;
       // printf("0x%02x\n", *(t-2));
       printf("exist invalid bit\n");
