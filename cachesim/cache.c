@@ -78,7 +78,6 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[choice].valid_bit = 1;
   this_cache[choice].dirty_bit = 0;
 
-  printf("index %d\n", index);
   return 0;
 }
 
@@ -134,8 +133,6 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   uint32_t *target = (uint32_t *)(this_cache[choice].data + addr_in_block);
   *target = data & wmask;
   this_cache[choice].dirty_bit = 1;
-
-  printf("index %d\n", index);
   return;
 }
 
