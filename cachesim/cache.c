@@ -40,7 +40,7 @@ uint32_t cache_read(uintptr_t addr) {
   uint32_t addr_in_block = ADDR_IN_BLOCK(addr); // addr in block
   line *this_cache = &cache[SET_SIZE * index];
 
-  printf("addr : 0x%08x\n", addr);
+  printf("addr : 0x%08lx\n", addr);
   printf("index of set : 0x%08x", index);
 
   // check whether hit
