@@ -49,7 +49,7 @@ uint32_t cache_read(uintptr_t addr) {
       return *ret;
     }
   }
-
+  return 0;
   // // miss缺失
   // uint32_t block_num = BLOCK_NUM(addr);
 
