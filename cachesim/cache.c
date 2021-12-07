@@ -40,7 +40,7 @@ uint32_t cache_read(uintptr_t addr) {
   uint32_t addr_in_block = ADDR_IN_BLOCK(addr); // addr in block
 
   // check every line of this set
-  line *this_cache = cache + SET_SIZE * index;
+  line *this_cache = &cache[SET_SIZE * index];
   for (int i = 0; i < SET_SIZE; ++ i) {
     // hit
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
@@ -77,7 +77,7 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[idx].tag = TAG(addr);
   uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
   return *ret;
-  
+
 }
   
 // 往 cache 中 addr 地址所属的块写入数据 data，写掩码为 wmask
