@@ -70,8 +70,8 @@ uint32_t cache_read(uintptr_t addr) {
   // all valid bits
   int idx = rand() % SET_SIZE;
   if (this_cache[idx].dirty_bit == true) {
-    mem_write(block_num, this_cache[idx].data);
-    // mem_write(this_cache[idx].tag << INDEX_WIDTH | index, this_cache[idx].data);
+    // mem_write(block_num, this_cache[idx].data);
+    mem_write(this_cache[idx].tag << INDEX_WIDTH | index, this_cache[idx].data);
   }
   // read the block into this line
   mem_read(block_num, this_cache[idx].data);
@@ -126,8 +126,8 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   // all valid bits
   int idx = rand() % SET_SIZE;
   if (this_cache[idx].dirty_bit == true) {
-    mem_write(block_num, this_cache[idx].data);
-    // mem_write(this_cache[idx].tag << INDEX_WIDTH | index, this_cache[idx].data);
+    // mem_write(block_num, this_cache[idx].data);
+    mem_write(this_cache[idx].tag << INDEX_WIDTH | index, this_cache[idx].data);
   }
   // read the block into this line
   mem_read(block_num, this_cache[idx].data);
