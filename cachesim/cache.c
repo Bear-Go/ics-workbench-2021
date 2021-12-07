@@ -29,6 +29,7 @@ static uint32_t INDEX_WIDTH = 0;
 #define INDEX(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(INDEX_WIDTH))
 #define TAG(addr) ((addr >> (BLOCK_WIDTH + INDEX_WIDTH)) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH - INDEX_WIDTH))
 #define ADDR_IN_BLOCK(addr) (addr & mask_with_len(BLOCK_WIDTH))
+#define BLOCK_NUM(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH))
 
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
@@ -49,7 +50,19 @@ uint32_t cache_read(uintptr_t addr) {
     }
   }
   // miss缺失
-  
+  uint32_t block_num = BLOCK_NUM(addr);
+  int choice = -1;
+  for (int i = 0; i < SET_SIZE; ++ i) {
+    cycle_increase(1);
+    if (!this_cache[i].valid_bit) {
+      choice = i;
+      break;
+    }
+  }
+  mem_read(block_num, (uint8_t *)this_cache[choice]);
+  if (choice == -1) {
+
+  } 
   printf("index %d\n", index);
   return 0;
 }
