@@ -41,7 +41,7 @@ uint32_t cache_read(uintptr_t addr) {
 
   // check every line of this set
   line *this_cache = cache + SET_SIZE * index;
-  printf("%d\n", this_cache-cache);
+  printf("%ld\n", this_cache - cache);
   for (int i = 0; i < SET_SIZE; ++ i) {
     // hit
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit) {
