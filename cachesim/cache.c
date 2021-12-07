@@ -74,8 +74,8 @@ uint32_t cache_read(uintptr_t addr) {
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       printf("*ret = 0x%08x\n", *ret);
       printf("exist invalid bit\n");
-      uint8_t *t = (uint8_t *)ret;
-      *ret = *ret << addr_offset_bit(*ret) | t[3];
+      uint32_t t = *ret & 0x3;
+      *ret = (*ret << addr_offset_bit(*ret)) | t;
       printf("*ret = 0x%08x\n", *ret);
       return *ret;
     }
