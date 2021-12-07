@@ -60,6 +60,7 @@ uint32_t cache_read(uintptr_t addr) {
   uint32_t block_num = BLOCK_NUM(addr);
 
   // exist invalid bit
+  this_cache = &cache[SET_SIZE * index];
   for (int i = 0; i < SET_SIZE; ++ i) {
     cycle_increase(1);
     if (this_cache[i].valid_bit == false) {
@@ -76,6 +77,7 @@ uint32_t cache_read(uintptr_t addr) {
 
   // all valid bits
   int idx = rand() % SET_SIZE;
+  this_cache = &cache[SET_SIZE * index];
   if (this_cache[idx].dirty_bit == true) {
     mem_write((this_cache[idx].tag << INDEX_WIDTH) | index, this_cache[idx].data);
   }
