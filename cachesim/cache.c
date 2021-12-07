@@ -51,6 +51,7 @@ uint32_t cache_read(uintptr_t addr) {
     cycle_increase(1);
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
+      printf("hit!\n\n");
       return *ret;
     }
   }
@@ -68,6 +69,7 @@ uint32_t cache_read(uintptr_t addr) {
       this_cache[i].dirty_bit = false;
       this_cache[i].tag = TAG(addr);
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
+      printf("exist invalid bit\n\n");
       return *ret;
     }
   }
@@ -83,6 +85,7 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[idx].dirty_bit = false;
   this_cache[idx].tag = TAG(addr);
   uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
+  printf("all valid bits\n\n");
   return *ret;
 
 }
