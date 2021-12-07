@@ -61,18 +61,22 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 例如 init_cache(14, 2) 将初始化一个 16KB，4 路组相联的cache
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
+
   LINE_NUM = exp2(total_size_width) / BLOCK_SIZE;
   SET_SIZE = exp2(associativity_width);
   SET_NUM = LINE_NUM / SET_SIZE;
   INDEX_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
-  printf("[LINE_NUM := %d]\n", LINE_NUM);
-  printf("[SET_SIZE := %d]\n", SET_SIZE);
-  printf("[SET_NUM := %d]\n", SET_NUM);
-  printf("[INDEX_WIDTH := %d]\n", INDEX_WIDTH);
+  
   // create the cache
   cache = (line *)malloc(sizeof(line) * LINE_NUM);
   // set valid bits
   for (int i = 0; i < LINE_NUM; ++ i) cache[i].valid_bit = 0;
+  
+  printf("[LINE_NUM := %d]\n", LINE_NUM);
+  printf("[SET_SIZE := %d]\n", SET_SIZE);
+  printf("[SET_NUM := %d]\n", SET_NUM);
+  printf("[INDEX_WIDTH := %d]\n", INDEX_WIDTH);
+  printf("init_cache finished\n");
 }
 
 void display_statistic(void) {
