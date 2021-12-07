@@ -41,7 +41,7 @@ uint32_t cache_read(uintptr_t addr) {
   line *this_cache = &cache[SET_SIZE * index];
 
   printf("addr : 0x%08lx\n", addr);
-  printf("index of set : 0x%08x\n", index);
+  printf("index of set : %d\n", index);
 
   // check whether hit
   for (int i = 0; i < SET_SIZE; ++ i) {
