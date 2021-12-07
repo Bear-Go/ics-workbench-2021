@@ -11,11 +11,18 @@ void cycle_increase(int n) { cycle_cnt += n; }
 
 // TODO: implement the following functions
 
+typedef struct {
+  bool valid_bit;
+  uint32_t tag;
+  uint8_t data[BLOCK_SIZE];
+} line;
+
+
 #define CACHE_SIZE (1 << 20) // 1MB
 #define BLOCK_NUM_MAX CACHE_SIZE / BLOCK_SIZE
-static uint8_t cache[CACHE_SIZE];
-static bool valid_bit[BLOCK_NUM_MAX];
-static uint32_t BLOCK_NUM = 0;
+static line *cache;
+
+static uint32_t LINE_NUM = 0;
 static uint32_t SET_SIZE = 0;
 static uint32_t SET_NUM = 0;
 static uint32_t SET_WIDTH = 0;
@@ -24,7 +31,7 @@ static uint32_t SET_WIDTH = 0;
 uint32_t cache_read(uintptr_t addr) {
   // get the block_num from addr
   uint32_t index = addr & mask_with_len(SET_WIDTH);
-  
+
   printf("index %d\n", index);
   return 0;
 }
@@ -39,15 +46,18 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 例如 init_cache(14, 2) 将初始化一个 16KB，4 路组相联的cache
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
-  BLOCK_NUM = exp2(total_size_width) / BLOCK_SIZE;
+  LINE_NUM = exp2(total_size_width) / BLOCK_SIZE;
   SET_SIZE = exp2(associativity_width);
-  SET_NUM = BLOCK_NUM / SET_SIZE;
+  SET_NUM = LINE_NUM / SET_SIZE;
   SET_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
-  printf("block num = %d\n", BLOCK_NUM);
+  printf("line num = %d\n", LINE_NUM);
   printf("set size = %d\n", SET_SIZE);
   printf("set num = %d\n", SET_NUM);
   printf("set width = %d\n", SET_WIDTH);
-  memset(valid_bit, 0, BLOCK_NUM);
+  // create the cache
+  cache = (line *)malloc(sizeof(line) * LINE_NUM);
+  // set valid bits
+  for (int i = 0; i < LINE_NUM; ++ i) cache[i].valid_bit = 0;
 }
 
 void display_statistic(void) {
