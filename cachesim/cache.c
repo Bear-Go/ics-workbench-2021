@@ -94,7 +94,11 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   for (int i = 0; i < SET_SIZE; ++ i) {
     cycle_increase(1);
     // hit
-    if ((this_cache[i].tag == tag) && this_cache[i].valid_bit) {
+    if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
+      printf("hit\n");
+      uint8_t *p = this_cache[i].data;
+      for (int i = 0; i < 64; ++ i) printf("%02x", p[i]);
+      printf("\n");
       uint32_t *target = (uint32_t *)(this_cache[i].data + addr_in_block);
       *target = data & wmask;
       this_cache[i].dirty_bit = true;
