@@ -85,9 +85,9 @@ uint32_t cache_read(uintptr_t addr) {
 void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   
   // get base info
-  uint32_t index = INDEX(addr);
-  uint32_t tag = TAG(addr);
-  uint32_t addr_in_block = ADDR_IN_BLOCK(addr);
+  uintptr_t index = INDEX(addr);
+  uintptr_t tag = TAG(addr);
+  uintptr_t addr_in_block = ADDR_IN_BLOCK(addr);
   printf("addr = 0x%08x\ntag index addr_in_block %08x %08x %08x\n", addr, tag, index, addr_in_block);
   // check every line of this set
   line *this_cache = cache + SET_SIZE * index;
