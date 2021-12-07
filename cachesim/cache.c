@@ -32,7 +32,7 @@ static uint32_t INDEX_WIDTH = 0;
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
-
+#ifndef READ
   // get base info
   uint32_t index = INDEX(addr);
   uint32_t tag = TAG(addr);
@@ -74,7 +74,7 @@ uint32_t cache_read(uintptr_t addr) {
   mem_read(block_num, this_cache[choice].data);
   this_cache[choice].valid_bit = 1;
   this_cache[choice].dirty_bit = 0;
-
+#endif
   return 0;
 }
 
