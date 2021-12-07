@@ -15,6 +15,7 @@ void cycle_increase(int n) { cycle_cnt += n; }
 
 typedef struct {
   bool valid_bit;
+  bool dirty_bit;
   uint32_t tag;
   uint8_t data[BLOCK_SIZE];
 } line;
@@ -34,6 +35,7 @@ static uint32_t INDEX_WIDTH = 0;
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
 uint32_t cache_read(uintptr_t addr) {
+
   // get the block_num from addr
   uint32_t index = INDEX(addr);
   uint32_t tag = TAG(addr);
@@ -49,23 +51,34 @@ uint32_t cache_read(uintptr_t addr) {
       return *ret;
     }
   }
+
   // miss缺失
   uint32_t block_num = BLOCK_NUM(addr);
-  int choice = -1;
+
+  // exist invalid bit
   for (int i = 0; i < SET_SIZE; ++ i) {
     cycle_increase(1);
     if (!this_cache[i].valid_bit) {
-      choice = i;
-      break;
+      // read the block into this line
+      mem_read(block_num, this_cache[i].data);
+      this_cache[i].valid_bit = 1;
+      this_cache[i].dirty_bit = 0;
+      this_cache[i].tag = TAG(addr);
+      uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
+      return *ret;
     }
+  }
+
+  // all valid bits
+  int choice = rand() % SET_SIZE;
+  if (this_cache[choice].dirty_bit) {
+
+    mem_write(this_cache[choice].tag << INDEX_WIDTH | index, this_cache[choice].data);
   }
   mem_read(block_num, this_cache[choice].data);
   this_cache[choice].valid_bit = 1;
-  this_cache[choice].tag = TAG(addr);
+  this_cache[choice].dirty_bit = 0;
 
-  if (choice == -1) {
-    choice = rand() % SET_SIZE;
-  } 
   printf("index %d\n", index);
   return 0;
 }
@@ -88,8 +101,11 @@ void init_cache(int total_size_width, int associativity_width) {
   
   // create the cache
   cache = (line *)malloc(sizeof(line) * LINE_NUM);
-  // set valid bits
-  for (int i = 0; i < LINE_NUM; ++ i) cache[i].valid_bit = 0;
+  // set valid bits & dirty bits
+  for (int i = 0; i < LINE_NUM; ++ i) {
+    cache[i].valid_bit = 0;
+    cache[i].dirty_bit = 0;
+  }
 
   printf("[LINE_NUM := %d]\n", LINE_NUM);
   printf("[SET_SIZE := %d]\n", SET_SIZE);
