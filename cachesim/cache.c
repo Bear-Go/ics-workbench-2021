@@ -39,17 +39,17 @@ uint32_t cache_read(uintptr_t addr) {
   uint32_t addr_in_block = ADDR_IN_BLOCK(addr);
 
   // check every line of this set
-  for (int i = SET_SIZE * index; i < SET_SIZE * (index + 1); ++ i) {
+  line *this_cache = cache + SET_SIZE * index;
+  for (int i = 0; i < SET_SIZE; ++ i) {
     cycle_increase(1);
     // hit
-    if ((cache[i].tag == tag) && cache[i].valid_bit) {
-      uint32_t *ret = (uint32_t *)(cache[i].data + addr_in_block);
+    if ((this_cache[i].tag == tag) && this_cache[i].valid_bit) {
+      uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       return *ret;
     }
   }
   // miss缺失
-  // cache2mem();
-  // mem2cache();
+  
   printf("index %d\n", index);
   return 0;
 }
