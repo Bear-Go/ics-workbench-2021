@@ -45,7 +45,7 @@ uint32_t cache_read(uintptr_t addr) {
       return *ret;
     }
   }
-  // miss
+  // miss缺失
 
   printf("index %d\n", index);
   return 0;
@@ -65,10 +65,10 @@ void init_cache(int total_size_width, int associativity_width) {
   SET_SIZE = exp2(associativity_width);
   SET_NUM = LINE_NUM / SET_SIZE;
   INDEX_WIDTH = total_size_width - BLOCK_WIDTH - associativity_width;
-  printf("line num = %d\n", LINE_NUM);
-  printf("set size = %d\n", SET_SIZE);
-  printf("set num = %d\n", SET_NUM);
-  printf("index width = %d\n", INDEX_WIDTH);
+  printf("[LINE_NUM := %d]\n", LINE_NUM);
+  printf("[SET_SIZE := %d]\n", SET_SIZE);
+  printf("[SET_NUM := %d]\n", SET_NUM);
+  printf("[INDEX_WIDTH := %d]\n", INDEX_WIDTH);
   // create the cache
   cache = (line *)malloc(sizeof(line) * LINE_NUM);
   // set valid bits
