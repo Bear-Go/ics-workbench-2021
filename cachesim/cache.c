@@ -29,6 +29,7 @@ static uint32_t INDEX_WIDTH = 0; // how many bits of index of set/group
 #define ADDR_IN_BLOCK(addr) (addr & mask_with_len(BLOCK_WIDTH))
 #define BLOCK_NUM(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH))
 #define MEM_WIDTH 25
+#define addr_offset_bit(addr) (((addr) & 0x3) * 8)
 
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
@@ -53,7 +54,7 @@ uint32_t cache_read(uintptr_t addr) {
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       printf("hit!\n");
-      return *ret;
+      return (*ret << addr_offset_bit(*ret));
     }
   }
 
@@ -71,9 +72,8 @@ uint32_t cache_read(uintptr_t addr) {
       this_cache[i].dirty_bit = false;
       this_cache[i].tag = TAG(addr);
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
-      printf("ret = 0x%08x\n", *ret);
       printf("exist invalid bit\n");
-      return *ret;
+      return (*ret << addr_offset_bit(*ret));
     }
   }
 
@@ -90,7 +90,7 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[idx].tag = TAG(addr);
   uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
   printf("all valid bits\n");
-  return *ret;
+  return (*ret << addr_offset_bit(*ret));
 
 }
   
