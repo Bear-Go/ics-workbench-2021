@@ -1,6 +1,5 @@
 #include "common.h"
 #include <inttypes.h>
-// #include <string.h>
 
 void mem_read(uintptr_t block_num, uint8_t *buf);
 void mem_write(uintptr_t block_num, const uint8_t *buf);
@@ -29,6 +28,8 @@ static uint32_t INDEX_WIDTH = 0;
 #define TAG(addr) ((addr >> (BLOCK_WIDTH + INDEX_WIDTH)) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH - INDEX_WIDTH))
 #define ADDR_IN_BLOCK(addr) (addr & mask_with_len(BLOCK_WIDTH))
 #define BLOCK_NUM(addr) ((addr >> BLOCK_WIDTH) & mask_with_len(MEM_WIDTH - BLOCK_WIDTH))
+
+
 
 // 从 cache 中读出 addr 地址处的 4 字节数据
 // 若缺失，需要先从内存中读入数据
@@ -123,7 +124,8 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   // all valid bits
   int choice = rand() % SET_SIZE;
   if (this_cache[choice].dirty_bit) {
-    mem_write(this_cache[choice].tag << INDEX_WIDTH | index, this_cache[choice].data);
+    mem_write(block_num, this_cache[choice].data);
+    // mem_write(this_cache[choice].tag << INDEX_WIDTH | index, this_cache[choice].data);
   }
   mem_read(block_num, this_cache[choice].data);
   this_cache[choice].valid_bit = 1;
