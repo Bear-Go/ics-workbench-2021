@@ -44,7 +44,7 @@ static void trace_exec(struct trace *t, bool is_check) {
     uint32_t ret = cpu_read(t->t.addr, t->t.len);
     if (is_check) {
       uint32_t ret_uncache = cpu_uncache_read(t->t.addr, t->t.len);
-      printf("read\n[0x%08x] : 0x%08x vs 0x%08x\n\n", t->t.addr, ret, ret_uncache);
+      printf("read\n[0x%08x] (len = %d): 0x%08x vs 0x%08x\n\n", t->t.addr, t->t.len, ret, ret_uncache);
       assert(ret == ret_uncache);
     }
   }
