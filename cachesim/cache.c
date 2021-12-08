@@ -88,7 +88,7 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[idx].valid_bit = true;
   this_cache[idx].dirty_bit = false;
   this_cache[idx].tag = TAG(addr);
-  uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
+  uint32_t *ret = (uint32_t *)(this_cache[i].data + (addr_in_block & ~0x3));
   printf("all valid bits\n");
   return *ret;
 
