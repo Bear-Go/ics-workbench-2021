@@ -38,7 +38,7 @@ uint32_t cache_read(uintptr_t addr) {
   addr &= mask_with_len(MEM_WIDTH);
   uint32_t index = INDEX(addr); // index of set
   uint32_t tag = TAG(addr); // tag of block
-  uint32_t addr_in_block = ADDR_IN_BLOCK(addr); // addr in block
+  uint32_t addr_in_block = (ADDR_IN_BLOCK(addr) & ~0x3); // addr in block
   line *this_cache = &cache[SET_SIZE * index];
 
   printf("addr : 0x%08lx\n", addr);
@@ -51,7 +51,7 @@ uint32_t cache_read(uintptr_t addr) {
     // hit
     cycle_increase(1);
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
-      uint32_t *ret = (uint32_t *)(this_cache[i].data + (addr_in_block & ~0x3));
+      uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       printf("hit!\n");
       return *ret;
     }
@@ -61,7 +61,6 @@ uint32_t cache_read(uintptr_t addr) {
   uint32_t block_num = BLOCK_NUM(addr);
 
   // exist invalid bit
-  this_cache = &cache[SET_SIZE * index];
   for (int i = 0; i < SET_SIZE; ++ i) {
     cycle_increase(1);
     if (this_cache[i].valid_bit == false) {
@@ -70,9 +69,8 @@ uint32_t cache_read(uintptr_t addr) {
       this_cache[i].valid_bit = true;
       this_cache[i].dirty_bit = false;
       this_cache[i].tag = TAG(addr);
-      uint32_t *ret = (uint32_t *)(this_cache[i].data + (addr_in_block & ~0x3));
+      uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       printf("exist invalid bit\n");
-      printf("cache read : 0x%08x\n", *ret);
       return *ret;
     }
   }
@@ -88,7 +86,7 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[idx].valid_bit = true;
   this_cache[idx].dirty_bit = false;
   this_cache[idx].tag = TAG(addr);
-  uint32_t *ret = (uint32_t *)(this_cache[i].data + (addr_in_block & ~0x3));
+  uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
   printf("all valid bits\n");
   return *ret;
 
@@ -103,7 +101,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   addr &= mask_with_len(MEM_WIDTH);
   uint32_t index = INDEX(addr); // index of set
   uint32_t tag = TAG(addr); // tag of block
-  uint32_t addr_in_block = ADDR_IN_BLOCK(addr); // addr in block
+  uint32_t addr_in_block = (ADDR_IN_BLOCK(addr) & ~0x3); // addr in block
   line *this_cache = &cache[SET_SIZE * index];
 
   // check every line of this set
