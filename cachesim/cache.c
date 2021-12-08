@@ -70,12 +70,7 @@ uint32_t cache_read(uintptr_t addr) {
       this_cache[i].valid_bit = true;
       this_cache[i].dirty_bit = false;
       this_cache[i].tag = TAG(addr);
-      uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block); // duo du le liang ge zi jie
-      char *t = (char *)ret;
-      printf("0x%02x\n", *t);
-      t = t;
-      ret = (uint32_t *)t;
-      // printf("0x%02x\n", *(t-2));
+      uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       printf("exist invalid bit\n");
       printf("cache read : 0x%08x\n", *ret);
       return *ret;
