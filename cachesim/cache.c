@@ -3,6 +3,7 @@
 
 void mem_read(uintptr_t block_num, uint8_t *buf);
 void mem_write(uintptr_t block_num, const uint8_t *buf);
+void
 
 static uint64_t cycle_cnt = 0;
 
@@ -36,20 +37,16 @@ uint32_t cache_read(uintptr_t addr) {
 
   // decomp addr
   addr &= mask_with_len(MEM_WIDTH);
-  uint32_t index = INDEX(addr); // index of set
-  uint32_t tag = TAG(addr); // tag of block
-  uint32_t addr_in_block = (ADDR_IN_BLOCK(addr) & ~0x3); // addr in block
+  uint32_t index = INDEX(addr);
+  uint32_t tag = TAG(addr);
+  uint32_t addr_in_block = (ADDR_IN_BLOCK(addr) & ~0x3);
   line *this_cache = &cache[SET_SIZE * index];
-
-  // printf("addr : 0x%08lx\n", addr);
-  // printf("index of set : %d\n", index);
-  // printf("tag : 0x%08x\n", tag);
-  // printf("addr in block : 0x%08x\n", addr_in_block);
 
   // check whether hit
   for (int i = 0; i < SET_SIZE; ++ i) {
-    // hit
     cycle_increase(1);
+    
+    // hit
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       return *ret;
@@ -63,11 +60,13 @@ uint32_t cache_read(uintptr_t addr) {
   for (int i = 0; i < SET_SIZE; ++ i) {
     cycle_increase(1);
     if (this_cache[i].valid_bit == false) {
+
       // read the block into this line
       mem_read(block_num, this_cache[i].data);
       this_cache[i].valid_bit = true;
       this_cache[i].dirty_bit = false;
-      this_cache[i].tag = TAG(addr);
+      this_cache[i].tag = tag;
+
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       return *ret;
     }
@@ -75,15 +74,16 @@ uint32_t cache_read(uintptr_t addr) {
 
   // all valid bits
   int idx = rand() % SET_SIZE;
-  this_cache = &cache[SET_SIZE * index];
   if (this_cache[idx].dirty_bit == true) {
     mem_write((this_cache[idx].tag << INDEX_WIDTH) | index, this_cache[idx].data);
   }
+
   // read the block into this line
   mem_read(block_num, this_cache[idx].data);
   this_cache[idx].valid_bit = true;
   this_cache[idx].dirty_bit = false;
-  this_cache[idx].tag = TAG(addr);
+  this_cache[idx].tag = tag;
+
   uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
   return *ret;
 
@@ -96,14 +96,15 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   
   // decomp addr
   addr &= mask_with_len(MEM_WIDTH);
-  uint32_t index = INDEX(addr); // index of set
-  uint32_t tag = TAG(addr); // tag of block
-  uint32_t addr_in_block = (ADDR_IN_BLOCK(addr) & ~0x3); // addr in block
+  uint32_t index = INDEX(addr);
+  uint32_t tag = TAG(addr);
+  uint32_t addr_in_block = (ADDR_IN_BLOCK(addr) & ~0x3);
   line *this_cache = &cache[SET_SIZE * index];
 
   // check every line of this set
   for (int i = 0; i < SET_SIZE; ++ i) {
     cycle_increase(1);
+    
     // hit
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
@@ -123,7 +124,8 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
       mem_read(block_num, this_cache[i].data);
       this_cache[i].valid_bit = true;
       this_cache[i].dirty_bit = false;
-      this_cache[i].tag = TAG(addr);
+      this_cache[i].tag = tag;
+
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
       *ret = (*ret & ~wmask) | (data & wmask);
       this_cache[i].dirty_bit = true;
@@ -136,11 +138,13 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   if (this_cache[idx].dirty_bit == true) {
     mem_write((this_cache[idx].tag << INDEX_WIDTH) | index, this_cache[idx].data);
   }
+  
   // read the block into this line
   mem_read(block_num, this_cache[idx].data);
   this_cache[idx].valid_bit = true;
   this_cache[idx].dirty_bit = false;
-  this_cache[idx].tag = TAG(addr);
+  this_cache[idx].tag = tag;
+
   uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
   *ret = (*ret & ~wmask) | (data & wmask);
   this_cache[idx].dirty_bit = true;
@@ -153,6 +157,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
 // 将所有 valid bit 置为无效即可
 void init_cache(int total_size_width, int associativity_width) {
 
+  // init parameters
   LINE_NUM = exp2(total_size_width) / BLOCK_SIZE;
   SET_SIZE = exp2(associativity_width);
   SET_NUM = LINE_NUM / SET_SIZE;
@@ -160,6 +165,7 @@ void init_cache(int total_size_width, int associativity_width) {
   
   // create the cache
   cache = malloc(sizeof(line) * LINE_NUM);
+
   // set valid bits & dirty bits
   for (int i = 0; i < LINE_NUM; ++ i) {
     cache[i].valid_bit = false;
