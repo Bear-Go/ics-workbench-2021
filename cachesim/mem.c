@@ -16,6 +16,7 @@ void init_mem(void) {
 // 从块号为`block_num`的内存地址中读出一整个cache块大小的内容到`buf`中
 void mem_read(uintptr_t block_num, uint8_t *buf) {
   memcpy(buf, mem + (block_num << BLOCK_WIDTH), BLOCK_SIZE);
+
   cycle_increase(25);
 }
 
@@ -26,6 +27,7 @@ void mem_write(uintptr_t block_num, const uint8_t *buf) {
 }
 
 uint32_t mem_uncache_read(uintptr_t addr) {
+  
   uint32_t *p = (void *)mem_diff + (addr & ~0x3);
   return *p;
 }
