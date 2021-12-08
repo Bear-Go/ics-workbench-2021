@@ -70,10 +70,6 @@ uint32_t cache_read(uintptr_t addr) {
       this_cache[i].valid_bit = true;
       this_cache[i].dirty_bit = false;
       this_cache[i].tag = TAG(addr);
-      printf("0x%02x\n", this_cache[i].data[addr_in_block - 1]);
-      printf("0x%02x\n", this_cache[i].data[addr_in_block]);
-      printf("0x%02x\n", this_cache[i].data[addr_in_block + 1]);
-      printf("0x%02x\n", this_cache[i].data[addr_in_block + 2]);
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block); // duo du le liang ge zi jie
       char *t = (char *)ret;
       printf("0x%02x\n", *t);
