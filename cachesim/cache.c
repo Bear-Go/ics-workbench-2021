@@ -3,7 +3,6 @@
 
 void mem_read(uintptr_t block_num, uint8_t *buf);
 void mem_write(uintptr_t block_num, const uint8_t *buf);
-void
 
 static uint64_t cycle_cnt = 0;
 
@@ -138,7 +137,7 @@ void cache_write(uintptr_t addr, uint32_t data, uint32_t wmask) {
   if (this_cache[idx].dirty_bit == true) {
     mem_write((this_cache[idx].tag << INDEX_WIDTH) | index, this_cache[idx].data);
   }
-  
+
   // read the block into this line
   mem_read(block_num, this_cache[idx].data);
   this_cache[idx].valid_bit = true;
