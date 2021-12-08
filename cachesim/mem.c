@@ -17,7 +17,7 @@ void init_mem(void) {
 void mem_read(uintptr_t block_num, uint8_t *buf) {
   memcpy(buf, mem + (block_num << BLOCK_WIDTH), BLOCK_SIZE);
   uint32_t *temp = (void *)buf;
-  printf("mem read @ block_num : %d first 4 bytes are 0x%08x", block_num, *temp);
+  printf("mem read @ block_num : %ld first 4 bytes are 0x%08x", block_num, *temp);
   cycle_increase(25);
 }
 
