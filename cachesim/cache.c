@@ -41,10 +41,10 @@ uint32_t cache_read(uintptr_t addr) {
   uint32_t addr_in_block = (ADDR_IN_BLOCK(addr) & ~0x3); // addr in block
   line *this_cache = &cache[SET_SIZE * index];
 
-  printf("addr : 0x%08lx\n", addr);
-  printf("index of set : %d\n", index);
-  printf("tag : 0x%08x\n", tag);
-  printf("addr in block : 0x%08x\n", addr_in_block);
+  // printf("addr : 0x%08lx\n", addr);
+  // printf("index of set : %d\n", index);
+  // printf("tag : 0x%08x\n", tag);
+  // printf("addr in block : 0x%08x\n", addr_in_block);
 
   // check whether hit
   for (int i = 0; i < SET_SIZE; ++ i) {
@@ -52,7 +52,6 @@ uint32_t cache_read(uintptr_t addr) {
     cycle_increase(1);
     if ((this_cache[i].tag == tag) && this_cache[i].valid_bit == true) {
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
-      printf("hit!\n");
       return *ret;
     }
   }
@@ -70,7 +69,6 @@ uint32_t cache_read(uintptr_t addr) {
       this_cache[i].dirty_bit = false;
       this_cache[i].tag = TAG(addr);
       uint32_t *ret = (uint32_t *)(this_cache[i].data + addr_in_block);
-      printf("exist invalid bit\n");
       return *ret;
     }
   }
@@ -87,7 +85,6 @@ uint32_t cache_read(uintptr_t addr) {
   this_cache[idx].dirty_bit = false;
   this_cache[idx].tag = TAG(addr);
   uint32_t *ret = (uint32_t *)(this_cache[idx].data + addr_in_block);
-  printf("all valid bits\n");
   return *ret;
 
 }
